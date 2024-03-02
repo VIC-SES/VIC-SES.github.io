@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <input type="file" id="fileInput" />
+    <input type="button" value="Load" onclick="loadFile()" />
+    <script src="./proj4.js"></script>
+    <script>
+        var firstProjection = proj4.defs("EPSG:3311", "+proj=aea +lat_0=0 +lon_0=-120 +lat_1=34 +lat_2=40.5 +x_0=0 +y_0=-4000000 +ellps=GRS80 +units=m +no_defs +type=crs");
+        var secondProjection = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+        proj4.defs("EPSG:3111","+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+
+        function loadFile() {
+            var file = document.getElementById("fileInput").files[0];
+            console.log("File loading")
+            var reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = function (e) {
+                console.log("File loaded")
+                var data = e.target.result;
+                var data = JSON.parse(data);
+                var features = data.features;
+                var geoJSON = {
+                    "type": data.type,
+                    "name": data.name,
+                    "features": []
+                }
+                features.forEach(function (feature) {
+                    console.log(feature.properties.RESPONSE_ZONE_AREA)
+                    var points = [[[]]]
+                    var c = feature.geometry.coordinates;
+                    c.forEach(function (c) {
+                        c.forEach(function (c) {
+                            c.forEach(function (c) {
+                                var p = proj4("EPSG:3111", "WGS84", c);
+                                points[0][0].push(p);
+                            })
+                        })
+                    });
+                    geoJSON.features.push({
+                        "type": feature.type,
+                        "properties": feature.properties,
+                        "geometry": { "type": feature.geometry.type, "coordinates": points }
+                    });
+                });
+                var newGeoJson = JSON.stringify(geoJSON);
+                console.log(newGeoJson);
+
+                const link = document.createElement("a");
+
+                // Create a blog object with the file content which you want to add to the file
+                const file = new Blob([newGeoJson], { type: 'text/plain' });
+
+                // Add file content in the object URL
+                link.href = URL.createObjectURL(file);
+
+                // Add file name
+                link.download = "download.geojson";
+
+                // Add click event to <a> tag to save file.
+                link.click();
+                URL.revokeObjectURL(link.href);
+            }
+        }
+    </script>
+</body>
+
+</html>

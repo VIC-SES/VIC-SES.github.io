@@ -23,6 +23,18 @@
       var map = L.map('map', {
         layers: [colour]
       }).setView([-37.81621815620749, 144.82259228486743], 13);
+
+      //Get the geojson data from a file
+      fetch('responseZone.geojson')
+        .then(response => response.json())
+        .then(data => {
+          var geojson = L.geoJson(data, {
+            onEachFeature: function (feature, layer) {
+              layer.bindPopup(feature.properties.RESPONSE_ZONE_AREA);
+            }
+          });
+          geojson.addTo(map);
+        });
     </script>
   </body>
 </html>
