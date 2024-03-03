@@ -14,6 +14,8 @@
         var secondProjection = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
         proj4.defs("EPSG:3111","+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
+        const typeOfTransform = "v2";
+
         function loadFile() {
             var file = document.getElementById("fileInput").files[0];
             console.log("File loading")
@@ -30,22 +32,61 @@
                     "features": []
                 }
                 features.forEach(function (feature) {
-                    console.log(feature.properties.RESPONSE_ZONE_AREA)
-                    var points = [[[]]]
-                    var c = feature.geometry.coordinates;
-                    c.forEach(function (c) {
-                        c.forEach(function (c) {
+                    switch (typeOfTransform){
+                        case "v1":
+                            console.log(feature.properties.RESPONSE_ZONE_AREA)
+                            var points = [[[]]]
+                            var c = feature.geometry.coordinates;
                             c.forEach(function (c) {
-                                var p = proj4("EPSG:3111", "WGS84", c);
-                                points[0][0].push(p);
-                            })
-                        })
-                    });
-                    geoJSON.features.push({
-                        "type": feature.type,
-                        "properties": feature.properties,
-                        "geometry": { "type": feature.geometry.type, "coordinates": points }
-                    });
+                                c.forEach(function (c) {
+                                    c.forEach(function (c) {
+                                        var p = proj4("EPSG:3111", "WGS84", c);
+                                        points[0][0].push(p);
+                                    })
+                                })
+                            });
+                            geoJSON.features.push({
+                                "type": feature.type,
+                                "properties": feature.properties,
+                                "geometry": { "type": feature.geometry.type, "coordinates": points }
+                            });
+                            break;
+                        case "v2":
+                            console.log(feature.properties.Response00)
+                            var coordinates = []
+                            var c = feature.geometry.coordinates;
+                            c.forEach(function (c) {
+                                var point1 = []
+                                c.forEach(function (c) {
+                                    var points2 = []
+                                    c.forEach(function (c) {
+                                        var p = proj4("EPSG:3111", "WGS84", c);
+                                        points2.push(p);
+                                    })
+                                    point1.push(points2);
+                                })
+                                coordinates.push(point1);
+                            });
+
+                            geoJSON.features.push({
+                                "type": feature.type,
+                                "properties": {
+                                    "Agency": feature.properties.Agency,
+                                    "Region": feature.properties.Region,
+                                    "Response_z": feature.properties.Response_z,
+                                    "Response00": feature.properties.Response00,
+                                    "Response01": feature.properties.Response01,
+                                    "Response02": feature.properties.Response02,
+                                    "Division": feature.properties.Division,
+                                    "localcmd": feature.properties.localcmd,
+                                    "localdmo": feature.properties.localdmo,
+                                    "dispch": feature.properties.dispch,
+                                    "dispfullna": feature.properties.dispfullna
+                                },
+                                "geometry": { "type": feature.geometry.type, "coordinates": coordinates }
+                            });
+                            break;
+                    }
                 });
                 var newGeoJson = JSON.stringify(geoJSON);
                 console.log(newGeoJson);
