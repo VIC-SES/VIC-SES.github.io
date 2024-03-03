@@ -24,12 +24,41 @@
         layers: [colour]
       }).setView([-37.81621815620749, 144.82259228486743], 13);
 
+      function getColour(responseZoneName) {
+        //VICSES regions
+        if (responseZoneName == "LODDON-MALLEE") {
+          return "red";
+        } else if (responseZoneName == "GRAMPIANS") {
+          return "blue";
+        } else if (responseZoneName == "HUME") {
+          return "green";
+        } else if (responseZoneName == "GIPPSLAND") {
+          return "yellow";
+        } else if (responseZoneName == "METRO") {
+          return "purple";
+        } else if (responseZoneName == "BARWON-SOUTH-WEST") {
+          return "orange";
+        } else if (responseZoneName == "EAST-METRO") {
+          return "pink";
+        } else if (responseZoneName == "NORTH-METRO") {
+          return "brown";
+        } else if (responseZoneName == "SOUTH-METRO") {
+          return "grey";
+        } else if (responseZoneName == "SOUTH-WEST") {
+          return "lightblue";
+        } else {
+          return "black";
+        }
+      }
+
       //Get the geojson data from a file
       fetch('responseZone.geojson')
         .then(response => response.json())
         .then(data => {
           var geojson = L.geoJson(data, {
             onEachFeature: function (feature, layer) {
+              //Assign each area with a different colour
+              layer.setStyle({color: 'black', fillColor: getColour(feature.properties.RESPONSE_ZONE_NAME), fillOpacity: 0.5});
               layer.bindPopup(`<table>
                 <tr>
                   <td colspan='2' >${feature.properties.RESPONSE_ZONE_NAME} (${feature.properties.RESPONSE_ZONE_CODE})<td>
@@ -40,7 +69,7 @@
                 <tr>
                   <tr>
                   <td>Region<td>
-                  <td>${feature.properties.RESPONSE_REGION}</td>
+                  <td>${feature.properties.REGION}</td>
                 <tr>
               </table>`);
             }
