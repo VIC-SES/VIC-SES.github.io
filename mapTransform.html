@@ -60,6 +60,7 @@
                                 c.forEach(function (c) {
                                     var points2 = []
                                     c.forEach(function (c) {
+                                        console.log(c)
                                         var p = proj4("EPSG:3111", "WGS84", c);
                                         points2.push(p);
                                     })
