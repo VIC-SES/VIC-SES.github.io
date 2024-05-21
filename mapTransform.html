@@ -59,14 +59,8 @@
                             c.forEach(function (c) {
                                 var point1 = []
                                 c.forEach(function (c) {
-                                    var points2 = []
-                                    c.forEach(function (c) {
-                                        console.log(c)
-                                        // var p = proj4("EPSG:3111", "WGS84", c);
-                                        var p = proj4("EPSG:7899", "WGS84", c);
-                                        points2.push(p);
-                                    })
-                                    point1.push(points2);
+                                    var p = proj4("EPSG:7899", "WGS84", c);
+                                    point1.push(p);
                                 })
                                 coordinates.push(point1);
                             });
