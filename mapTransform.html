@@ -19,6 +19,7 @@
         
 
         const typeOfTransform = "v3";
+        console.log(unitLookup)
 
         function loadFile() {
             var file = document.getElementById("fileInput").files[0];
@@ -87,15 +88,15 @@
                             });
                             break;
                         case 'v3':
-                            for (var i = 0; i < geoJSON.features.length; i++) {
-                                geoJSON.features[i].properties.Response01 = unitLookup[geoJSON.features[i].properties.Response_z];
-                                geoJSON.features[i].properties.Response01 = regionLookup[geoJSON.features[i].properties.Response_z];
-                                console.log(geoJSON.features[i].properties.Response_z, geoJSON.features[i].properties.Response01)
-                            }
+                            if (!unitLookup[feature.properties.Response_z]) console.log(feature.properties.Response_z)
+                            feature.properties.Response01 = unitLookup[feature.properties["Response_z"]];
+                            feature.properties.Response01 = regionLookup[feature.properties["Response01"]];
+                            console.log(feature.properties)
+                            geoJSON.features.push(feature);
                     }
                 });
                 var newGeoJson = JSON.stringify(geoJSON);
-                console.log(newGeoJson);
+                // console.log(newGeoJson);
 
                 const link = document.createElement("a");
 
