@@ -86,7 +86,7 @@
                                 "geometry": { "type": feature.geometry.type, "coordinates": coordinates }
                             });
                             break;
-                        case 3:
+                        case 'v3':
                             for (var i = 0; i < geoJSON.features.length; i++) {
                                 geoJSON.features[i].properties.Response01 = unitLookup[geoJSON.features[i].properties.Response_z];
                                 geoJSON.features[i].properties.Response01 = regionLookup[geoJSON.features[i].properties.Response_z];
