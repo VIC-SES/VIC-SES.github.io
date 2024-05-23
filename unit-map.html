@@ -56,7 +56,8 @@
       }
 
       //Get the geojson data from a file
-      fetch('responseZones.geojson')
+      // fetch('responseZones.geojson')
+      fetch('VICSES_Units_RZ232.geojson')
         .then(response => response.json())
         .then(data => {
           var geojson = L.geoJson(data, {
