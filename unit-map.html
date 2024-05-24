@@ -64,7 +64,7 @@
         .then(data => {
           var geojson = L.geoJson(data, {
             coordsToLatLng: function (coords) {
-              return proj4("EPSG:3111", "WGS84", c);
+              return proj4("EPSG:3111", "WGS84", coords);
             },
             onEachFeature: function (feature, layer) {
               //Assign each area with a different colour
