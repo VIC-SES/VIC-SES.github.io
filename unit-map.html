@@ -59,14 +59,10 @@
 
       //Get the geojson data from a file
       // fetch('responseZones.geojson')
-      fetch('VICSES_Units_RZ232.geojson')
+      fetch('build.geojson')
         .then(response => response.json())
         .then(data => {
           var geojson = L.geoJson(data, {
-            coordsToLatLng: function (coords) {
-              console.log(proj4("EPSG:3111", "WGS84", coords))
-              return proj4("EPSG:3111", "WGS84", coords);
-            },
             onEachFeature: function (feature, layer) {
               //Assign each area with a different colour
               layer.setStyle({color: 'black', weight: 2, fillColor: getColour(feature.properties.Response01), fillOpacity: 0.5, });
