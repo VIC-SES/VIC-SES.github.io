@@ -6,10 +6,57 @@
      crossorigin=""/>
     <style>
       #map { height: 500px; }
-      table, th, td {
-          border: 1px solid black;
-          border-collapse: collapse;
-      }
+      body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1em;
+            min-width: 400px;
+            border-radius: 5px 5px 0 0;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        table thead tr {
+            background-color: #0077C8;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        table th,
+        table td {
+            padding: 12px 15px;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        table tbody tr:last-of-type {
+            border-bottom: 2px solid #0077C8;
+        }
+
+        table tbody tr.active-row {
+            font-weight: bold;
+            color: #0077C8;
+        }
+
+        .header {
+            background-color: #E84E0F;
+            color: #ffffff;
+            text-align: center;
+            font-size: 1.5em;
+        }
     </style>
   </head>
   <body>
@@ -17,9 +64,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
-    <script src="./proj4.js"></script>
     <script>
-      proj4.defs("EPSG:3111","+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
       var colour = L.tileLayer('https://mapscape.maps.em.vic.gov.au/color/{z}/{x}/{y}.png', {
           attribution: 'Spatial Vision',
           minZoom: 6,
@@ -68,7 +113,7 @@
               layer.setStyle({color: 'black', weight: 2, fillColor: getColour(feature.properties.RESPONSE_ZONE_AREA), fillOpacity: 0.5, });
               layer.bindPopup(`<table>
                 <tr>
-                  <td colspan='3' style="text-align: center">${feature.properties.RESPONSE_ZONE_NAME} (${feature.properties.RESPONSE_ZONE_CODE})</td>
+>${feature.properties.RESPONSE_ZONE_NAME} (${feature.properties.RESPONSE_ZONE_CODE})</td>
                 </tr>
                 <tr>
                   <td style="width:1%">Area</td>
