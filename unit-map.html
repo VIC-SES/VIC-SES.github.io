@@ -133,6 +133,16 @@
           });
           console.log(geojson)
           geojson.addTo(map);
+          geojson.eachLayer(function(layer) {
+          var fontSize = layer.feature.properties.area / map.getZoom() * 30000;
+          if(fontSize > 1) {
+            layer.bindTooltip("<span style='font-size: " + fontSize + "px'>" + layer.feature.properties.RESPONSE_ZONE_NAME + "</span>", {
+              className: "label",
+              permanent: true,
+              direction: "center"
+            }).openTooltip();
+          }
+        });
         });
     </script>
   </body>
