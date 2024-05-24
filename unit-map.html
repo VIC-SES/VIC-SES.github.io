@@ -61,8 +61,8 @@
         .then(response => response.json())
         .then(data => {
           var geojson = L.geoJson(data, {
-            pointToLayer: function (feature, latlng) {
-                console.log(latlng)
+            coordsToLatLng: function (coords) {
+              return new L.Point(coords[0], coords[1])
             },
             onEachFeature: function (feature, layer) {
               //Assign each area with a different colour
