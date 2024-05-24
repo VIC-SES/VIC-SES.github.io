@@ -17,7 +17,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
+    <script src="./proj4.js"></script>
     <script>
+      proj4.defs("EPSG:3111","+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
       var colour = L.tileLayer('https://mapscape.maps.em.vic.gov.au/color/{z}/{x}/{y}.png', {
           attribution: 'Spatial Vision',
           minZoom: 6,
@@ -62,7 +64,7 @@
         .then(data => {
           var geojson = L.geoJson(data, {
             coordsToLatLng: function (coords) {
-              return new L.Point(coords[0], coords[1])
+              return proj4("EPSG:3111", "WGS84", c);
             },
             onEachFeature: function (feature, layer) {
               //Assign each area with a different colour
