@@ -109,7 +109,7 @@
           var geojson = L.geoJson(data, {
             onEachFeature: function (feature, layer) {
               //Assign each area with a different colour
-              layer.setStyle({color: 'black', weight: 2, fillColor: getColour(feature.properties.RESPONSE_ZONE_AREA), fillOpacity: 0.3});
+              layer.setStyle({color: 'black', weight: 2, fillColor: getColour(feature.properties.RESPONSE_ZONE_AREA), fillOpacity: 0.15});
               layer.bindPopup(`<table>
                 <tr>
                   <th colspan="3" class="header">${feature.properties.RESPONSE_ZONE_NAME} (${feature.properties.RESPONSE_ZONE_CODE})</th>
@@ -124,9 +124,9 @@
                   <td>Local</td>
                 <tr>
                 <tr>
-                  <td>${feature.properties.dispch}</td>
-                  <td>${feature.properties.localcmd}</td>
-                  <td>${feature.properties.localdmo}</td>
+                  <td>${feature.properties.dispch || "📻"}</td>
+                  <td>${feature.properties.localcmd || "📻"}</td>
+                  <td>${feature.properties.localdmo || "📻"}</td>
                 <tr>
               </table>`);
             }
