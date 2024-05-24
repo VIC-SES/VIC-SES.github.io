@@ -16,7 +16,6 @@
             border-collapse: collapse;
             margin: 20px 0;
             font-size: 1em;
-            min-width: 400px;
             border-radius: 5px 5px 0 0;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -113,7 +112,7 @@
               layer.setStyle({color: 'black', weight: 2, fillColor: getColour(feature.properties.RESPONSE_ZONE_AREA), fillOpacity: 0.5, });
               layer.bindPopup(`<table>
                 <tr>
->${feature.properties.RESPONSE_ZONE_NAME} (${feature.properties.RESPONSE_ZONE_CODE})</td>
+                  <th colspan="3" class="header">${feature.properties.RESPONSE_ZONE_NAME} (${feature.properties.RESPONSE_ZONE_CODE})</th>
                 </tr>
                 <tr>
                   <td style="width:1%">Area</td>
