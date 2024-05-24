@@ -56,6 +56,12 @@
             text-align: center;
             font-size: 1.25em;
         }
+        .leaflet-tooltip{
+          background-color: none;
+          border: none;
+          box-shadow: none;
+          -webkit-text-stroke: 1px black;
+        }
     </style>
   </head>
   <body>
@@ -136,7 +142,7 @@
           geoJSONLayer = geojson.addTo(map);
           geoJSONLayer.eachLayer(function(layer) {
             console.log(layer)
-            var fontSize = layer.feature.properties.area / map.getZoom() * 30000;
+            var fontSize = layer.feature.properties.area / map.getZoom() * 3000;
             layer.bindTooltip("<span style='font-size: " + fontSize + "px'>" + layer.feature.properties.RESPONSE_ZONE_NAME + "</span>", {
               className: "label",
               permanent: true,
