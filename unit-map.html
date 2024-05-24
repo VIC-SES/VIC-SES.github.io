@@ -101,6 +101,8 @@
         }
       }
 
+      var geoJSONLayer
+
       //Get the geojson data from a file
       // fetch('responseZones.geojson')
       fetch('build.geojson')
@@ -131,18 +133,17 @@
               </table>`);
             }
           });
-          console.log(geojson)
-          geojson.addTo(map);
-          geojson.eachLayer(function(layer) {
-          var fontSize = layer.feature.properties.area / map.getZoom() * 30000;
-          if(fontSize > 1) {
-            layer.bindTooltip("<span style='font-size: " + fontSize + "px'>" + layer.feature.properties.RESPONSE_ZONE_NAME + "</span>", {
-              className: "label",
-              permanent: true,
-              direction: "center"
-            }).openTooltip();
-          }
-        });
+          var geoJSONLayer = geojson.addTo(map);
+          geoJSONLayer.eachLayer(function(layer) {
+            var fontSize = layer.feature.properties.area / map.getZoom() * 30000;
+            if(fontSize > 1) {
+              layer.bindTooltip("<span style='font-size: " + fontSize + "px'>" + layer.feature.properties.RESPONSE_ZONE_NAME + "</span>", {
+                className: "label",
+                permanent: true,
+                direction: "center"
+              }).openTooltip();
+            }
+          });
         });
     </script>
   </body>
