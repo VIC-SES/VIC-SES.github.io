@@ -64,6 +64,7 @@
         .then(data => {
           var geojson = L.geoJson(data, {
             coordsToLatLng: function (coords) {
+              console.log(proj4("EPSG:3111", "WGS84", coords))
               return proj4("EPSG:3111", "WGS84", coords);
             },
             onEachFeature: function (feature, layer) {
