@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    <style>
+      #map { height: 500px; }
+      body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1em;
+            border-radius: 5px 5px 0 0;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        table thead tr {
+            background-color: #0077C8;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        table th,
+        table td {
+            padding: 12px 15px;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        table tbody tr:last-of-type {
+            border-bottom: 2px solid #0077C8;
+        }
+
+        table tbody tr.active-row {
+            font-weight: bold;
+            color: #0077C8;
+        }
+
+        .header {
+            background-color: #E84E0F;
+            color: #ffffff;
+            text-align: center;
+            font-size: 1.25em;
+        }
+        .leaflet-tooltip{
+          background: white;
+          border: none;
+          box-shadow: none;
+          font-size: 1.2em;
+          font-weight: bolder;
+          padding: 1px;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+    <script>
+      var colour = L.tileLayer('https://mapscape.maps.em.vic.gov.au/color/{z}/{x}/{y}.png', {
+          attribution: 'Spatial Vision',
+          minZoom: 6,
+          maxZoom: 18,
+          tileSize: 256
+      })
+      var map = L.map('map', {
+        layers: [colour]
+      }).setView({lat: -37.31775185163688, lng: 145.52490234375003}, 7);
+
+      function getColour(responseZoneName) {
+        //VICSES regions
+        if (responseZoneName == "LODDON-MALLEE") {
+          return "red";
+        } else if (responseZoneName == "GRAMPIANS") {
+          return "blue";
+        } else if (responseZoneName == "HUME") {
+          return "green";
+        } else if (responseZoneName == "GIPPSLAND") {
+          return "yellow";
+        } else if (responseZoneName == "METRO") {
+          return "purple";
+        } else if (responseZoneName == "BARWON-SOUTH-WEST") {
+          return "orange";
+        } else if (responseZoneName == "EAST-METRO") {
+          return "pink";
+        } else if (responseZoneName == "NORTH-METRO") {
+          return "brown";
+        } else if (responseZoneName == "SOUTH-METRO") {
+          return "grey";
+        } else if (responseZoneName == "SOUTH-WEST") {
+          return "lightblue";
+        } else {
+          return "black";
+        }
+      }
+
+      var geoJSONLayer
+
+      //Get the geojson data from a file
+      // fetch('responseZones.geojson')
+      fetch('build.geojson')
+        .then(response => response.json())
+        .then(data => {
+          var geojson = L.geoJson(data, {
+            onEachFeature: function (feature, layer) {
+              //Assign each area with a different colour
+              layer.setStyle({color: 'black', weight: 2, fillColor: getColour(feature.properties.RESPONSE_ZONE_AREA), fillOpacity: 0.15});
+              layer.bindPopup(`<table>
+                <tr>
+                  <th colspan="3" class="header">${feature.properties.RESPONSE_ZONE_NAME} (${feature.properties.RESPONSE_ZONE_CODE})</th>
+                </tr>
+                <tr>
+                  <td style="width:1%">Area</td>
+                  <td colspan="2">${feature.properties.RESPONSE_ZONE_AREA}</td>
+                </tr>
+                <tr>
+                  <td>Dispatch</td>
+                  <td>Command</td>
+                  <td>Local</td>
+                <tr>
+                <tr>
+                  <td>${feature.properties.dispch || "📻"}</td>
+                  <td>${feature.properties.localcmd || "📻"}</td>
+                  <td>${feature.properties.localdmo || "📻"}</td>
+                <tr>
+              </table>`);
+            }
+          });
+          geoJSONLayer = geojson.addTo(map);
+          geoJSONLayer.eachLayer(function(layer) {
+            console.log(layer)
+            var fontSize = layer.feature.properties.area / map.getZoom() * 3000;
+            layer.bindTooltip("<span style='font-size: " + fontSize + "px'>" + layer.feature.properties.RESPONSE_ZONE_NAME + "</span>", {
+              className: "label",
+              permanent: true,
+              direction: "center"
+            }).openTooltip();
+          });
+        });
+    </script>
+  </body>
+</html>
