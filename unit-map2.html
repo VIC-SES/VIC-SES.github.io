@@ -82,6 +82,32 @@
         layers: [colour]
       }).setView({lat: -37.31775185163688, lng: 145.52490234375003}, 7);
 
+      function getColour(responseZoneName) {
+        //VICSES regions
+        if (responseZoneName == "LODDON-MALLEE") {
+          return "red";
+        } else if (responseZoneName == "GRAMPIANS") {
+          return "blue";
+        } else if (responseZoneName == "HUME") {
+          return "green";
+        } else if (responseZoneName == "GIPPSLAND") {
+          return "yellow";
+        } else if (responseZoneName == "METRO") {
+          return "purple";
+        } else if (responseZoneName == "BARWON-SOUTH-WEST") {
+          return "orange";
+        } else if (responseZoneName == "EAST-METRO") {
+          return "pink";
+        } else if (responseZoneName == "NORTH-METRO") {
+          return "brown";
+        } else if (responseZoneName == "SOUTH-METRO") {
+          return "grey";
+        } else if (responseZoneName == "SOUTH-WEST") {
+          return "lightblue";
+        } else {
+          return "black";
+        }
+      }
       var geoJSONLayer
 
       //Get the geojson data from a file
