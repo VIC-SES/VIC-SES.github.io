@@ -82,28 +82,34 @@
         layers: [colour]
       }).setView({lat: -37.31775185163688, lng: 145.52490234375003}, 7);
 
-      function getColour(responseZoneName) {
+      function getColour(RADIO_DISPATCH) {
         //VICSES regions
-        if (responseZoneName == "LODDON-MALLEE") {
-          return "red";
-        } else if (responseZoneName == "GRAMPIANS") {
-          return "blue";
-        } else if (responseZoneName == "HUME") {
+        if (RADIO_DISPATCH == "2201") {
           return "green";
-        } else if (responseZoneName == "GIPPSLAND") {
+        } else if (RADIO_DISPATCH == "2202") {
+          return "green";
+        } else if (RADIO_DISPATCH == "2301") {
+          return "MediumAquamarine";
+        } else if (RADIO_DISPATCH == "2302") {
+          return "MediumAquamarine";
+        } else if (RADIO_DISPATCH == "2401") {
           return "yellow";
-        } else if (responseZoneName == "METRO") {
-          return "purple";
-        } else if (responseZoneName == "BARWON-SOUTH-WEST") {
+        } else if (RADIO_DISPATCH == "2402") {
+          return "yellow";
+        } else if (RADIO_DISPATCH == "2501") {
+          return "red";
+        } else if (RADIO_DISPATCH == "2502") {
+          return "red";
+        } else if (RADIO_DISPATCH == "2601") {
+          return "blue";
+        } else if (RADIO_DISPATCH == "2701") {
+          return "blue";
+        } else if (RADIO_DISPATCH == "2801") {
+          return "blue";
+        } else if (RADIO_DISPATCH == "2901") {
           return "orange";
-        } else if (responseZoneName == "EAST-METRO") {
-          return "pink";
-        } else if (responseZoneName == "NORTH-METRO") {
-          return "brown";
-        } else if (responseZoneName == "SOUTH-METRO") {
-          return "grey";
-        } else if (responseZoneName == "SOUTH-WEST") {
-          return "lightblue";
+        } else if (RADIO_DISPATCH == "2902") {
+          return "orange"
         } else {
           return "black";
         }
@@ -124,18 +130,18 @@
                   <th colspan="3" class="header">${feature.properties.RESPONSE_ZONE_NAME} (${feature.properties.RESPONSE_ZONE_CODE})</th>
                 </tr>
                 <tr>
-                  <td style="width:1%">Area</td>
+                  <td style="width:1%">Region:</td>
                   <td colspan="2">${feature.properties.RESPONSE_ZONE_AREA}</td>
                 </tr>
                 <tr>
-                  <td>Dispatch</td>
-                  <td>Command</td>
-                  <td>Local</td>
+                  <td>Dispatch:</td>
+                  <td>Command:</td>
+                  <td>Local:</td>
                 <tr>
                 <tr>
-                  <td>${feature.properties.RADIO_DISPATCH || "HELLOWORLD"}</td>
-                  <td>${feature.properties.RADIO_CMD || "📻"}</td>
-                  <td>${feature.properties.RADIO_LOCAL || "📻"}</td>
+                  <td>${feature.properties.RADIO_DISPATCH || "📻 COMMSDO, Please Help?"}</td>
+                  <td>${feature.properties.RADIO_CMD || "📻 COMMSDO, Please Help?"}</td>
+                  <td>${feature.properties.RADIO_LOCAL || "📻 COMMSDO, Please Help?"}</td>
                 <tr>
               </table>`);
             }
