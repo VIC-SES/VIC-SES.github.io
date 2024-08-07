@@ -72,7 +72,7 @@
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
     <script>
-      var colour = L.tileLayer('https://mapscape.maps.em.vic.gov.au/color/{z}/{x}/{y}.png', {
+      var colour = L.tileLayer('https://mapscape.maps.em.vic.gov.au/greyscale/{z}/{x}/{y}.png', {   // Spatial Vision MapScpae XYZ Tiles - Hosted by EMV
           attribution: 'Spatial Vision',
           minZoom: 6,
           maxZoom: 18,
@@ -80,46 +80,47 @@
       })
       var map = L.map('map', {
         layers: [colour]
-      }).setView({lat: -37.31775185163688, lng: 145.52490234375003}, 7);
+      }).setView({lat: -37.31775185163688, lng: 145.52490234375003}, 7);     // Centre the Map over Victoria
 
-      function getColour(responseZoneName) {
-        //VICSES regions
-        if (responseZoneName == "LODDON-MALLEE") {
-          return "red";
-        } else if (responseZoneName == "GRAMPIANS") {
-          return "blue";
-        } else if (responseZoneName == "HUME") {
-          return "green";
-        } else if (responseZoneName == "GIPPSLAND") {
-          return "yellow";
-        } else if (responseZoneName == "METRO") {
-          return "purple";
-        } else if (responseZoneName == "BARWON-SOUTH-WEST") {
-          return "orange";
-        } else if (responseZoneName == "EAST-METRO") {
-          return "pink";
-        } else if (responseZoneName == "NORTH-METRO") {
-          return "brown";
-        } else if (responseZoneName == "SOUTH-METRO") {
-          return "grey";
-        } else if (responseZoneName == "SOUTH-WEST") {
-          return "lightblue";
+      function getColour(RADIO_DISPATCH) {    // Change Polygon Background Colours based on the Dispatch Talkgroup Number A.K.A RADIO_DISPATCH - Applicable Func Below
+        if (RADIO_DISPATCH == 2201) {
+          return "#E9FFDF";
+        } else if (RADIO_DISPATCH == 2202) {
+          return "#D1FFB9";
+        } else if (RADIO_DISPATCH == 2301) {
+          return "#DFFFF4";
+        } else if (RADIO_DISPATCH == 2302) {
+          return "#B9FFEF";
+        } else if (RADIO_DISPATCH == 2401) {
+          return "#FFFFDF";
+        } else if (RADIO_DISPATCH == 2402) {
+          return "#FFFFB9";
+        } else if (RADIO_DISPATCH == 2501) {
+          return "#FFDFDF";
+        } else if (RADIO_DISPATCH == 2502) {
+          return "#FFBFBF";
+        } else if (RADIO_DISPATCH == 2601) {
+          return "#B9D9FF";
+        } else if (RADIO_DISPATCH == 2701) {
+          return "#DFE9FF";
+        } else if (RADIO_DISPATCH == 2801) {
+          return "#80B8FF";
+        } else if (RADIO_DISPATCH == 2901) {
+          return "#FFF5D7";
+        } else if (RADIO_DISPATCH == 2902) {
+          return "#FFF9BF"
         } else {
           return "black";
         }
       }
-
       var geoJSONLayer
 
-      //Get the geojson data from a file
-      // fetch('responseZones.geojson')
-      fetch('build.geojson')
+      fetch('build.geojson')    //Get the geojson data from a file - build.geojson - This is a simplified version of the VICSES RZ Data from GIS Officer (Needed to reduce filesize)
         .then(response => response.json())
         .then(data => {
           var geojson = L.geoJson(data, {
             onEachFeature: function (feature, layer) {
-              //Assign each area with a different colour
-              layer.setStyle({color: 'black', weight: 2, fillColor: getColour(feature.properties.RESPONSE_ZONE_AREA), fillOpacity: 0.15});
+              layer.setStyle({color: '#8E98A2', weight: 2, fillColor: getColour(feature.properties.RADIO_DISPATCH), fillOpacity: 0.6}); // This is linked to the above getcolour function variables
               layer.bindPopup(`<table>
                 <tr>
                   <th colspan="3" class="header">${feature.properties.RESPONSE_ZONE_NAME} (${feature.properties.RESPONSE_ZONE_CODE})</th>
@@ -129,14 +130,14 @@
                   <td colspan="2">${feature.properties.RESPONSE_ZONE_AREA}</td>
                 </tr>
                 <tr>
-                  <td>Dispatch</td>
-                  <td>Command</td>
-                  <td>Local</td>
+                  <td>Dispatch:</td>
+                  <td>Command:</td>
+                  <td>Local:</td>
                 <tr>
                 <tr>
-                  <td>${feature.properties.dispch || "📻"}</td>
-                  <td>${feature.properties.localcmd || "📻"}</td>
-                  <td>${feature.properties.localdmo || "📻"}</td>
+                  <td>${feature.properties.RADIO_DISPATCH || "📻 COMMSDO, Please Help?"}</td>
+                  <td>${feature.properties.RADIO_CMD || "📻 COMMSDO, Please Help?"}</td>
+                  <td>${feature.properties.RADIO_LOCAL || "📻 COMMSDO, Please Help?"}</td>
                 <tr>
               </table>`);
             }
