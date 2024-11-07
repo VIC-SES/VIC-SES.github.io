@@ -72,13 +72,6 @@
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
     <script>
-      const params = new URLSearchParams(location.search);  // Use `location.search` instead of `location.href`
-      const h = parseInt(params.get("h"), 10);  // Always specify the radix (base) for parseInt
-      
-      if (!isNaN(h) && h > 0) {  // Ensure that `h` is a valid number and greater than 0
-        document.getElementById("map").setAttribute("style", "height:" + h + "px");
-        map.invalidateSize();
-      }
       
       var colour = L.tileLayer('https://mapscape.maps.em.vic.gov.au/greyscale/{z}/{x}/{y}.png', {   // Spatial Vision MapScpae XYZ Tiles - Hosted by EMV
           attribution: 'Spatial Vision',
@@ -89,6 +82,15 @@
       var map = L.map('map', {
         layers: [colour]
       }).setView({lat: -37.31775185163688, lng: 145.52490234375003}, 7);     // Centre the Map over Victoria
+
+      
+      const params = new URLSearchParams(location.search);  // Use `location.search` instead of `location.href`
+      const h = parseInt(params.get("h"), 10);  // Always specify the radix (base) for parseInt
+      
+      if (!isNaN(h) && h > 0) {  // Ensure that `h` is a valid number and greater than 0
+        document.getElementById("map").setAttribute("style", "height:" + h + "px");
+        map.invalidateSize();
+      }
 
       function getColour(RADIO_DISPATCH) {    // Change Polygon Background Colours based on the Dispatch Talkgroup Number A.K.A RADIO_DISPATCH - Applicable Func Below
         if (RADIO_DISPATCH == 2201) {
