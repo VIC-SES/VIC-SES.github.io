@@ -72,6 +72,13 @@
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
     <script>
+      const params = new URLSearchParams(location.href.search);
+      const h = parseInt(params.get("h"));
+      if (h && typeof h === 'number'){
+        document.getElementById("map").setAttribute("style", "height:"+h+"px")
+        map.invalidateSize();
+      }
+      
       var colour = L.tileLayer('https://mapscape.maps.em.vic.gov.au/greyscale/{z}/{x}/{y}.png', {   // Spatial Vision MapScpae XYZ Tiles - Hosted by EMV
           attribution: 'Spatial Vision',
           minZoom: 6,
