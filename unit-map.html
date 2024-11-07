@@ -72,10 +72,11 @@
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
     <script>
-      const params = new URLSearchParams(location.href.search);
-      const h = parseInt(params.get("h"));
-      if (h && typeof h === 'number'){
-        document.getElementById("map").setAttribute("style", "height:"+h+"px")
+      const params = new URLSearchParams(location.search);  // Use `location.search` instead of `location.href`
+      const h = parseInt(params.get("h"), 10);  // Always specify the radix (base) for parseInt
+      
+      if (!isNaN(h) && h > 0) {  // Ensure that `h` is a valid number and greater than 0
+        document.getElementById("map").setAttribute("style", "height:" + h + "px");
         map.invalidateSize();
       }
       
