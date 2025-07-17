@@ -11,10 +11,8 @@
     <script src="./proj4.js"></script>
     <script src="unitLookup.js"></script>
     <script>
-        var firstProjection = proj4.defs("EPSG:3311", "+proj=aea +lat_0=0 +lon_0=-120 +lat_1=34 +lat_2=40.5 +x_0=0 +y_0=-4000000 +ellps=GRS80 +units=m +no_defs +type=crs");
-        var secondProjection = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs";
+        proj4.defs("EPSG:4326","+proj=longlat +datum=WGS84 +no_defs +type=crs");
         proj4.defs("EPSG:3111","+proj=lcc +lat_1=-36 +lat_2=-38 +lat_0=-37 +lon_0=145 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-        proj4.defs("EPSG:7899","+proj=lcc +lat_0=-37 +lon_0=145 +lat_1=-36 +lat_2=-38 +x_0=2500000 +y_0=2500000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
 
         
 
@@ -37,63 +35,35 @@
                     "features": []
                 }
                 features.forEach(function (feature) {
-                    switch (typeOfTransform){
-                        case "v1":
-                            console.log(feature.properties.RESPONSE_ZONE_AREA)
-                            var points = [[[]]]
-                            var c = feature.geometry.coordinates;
-                            c.forEach(function (c) {
-                                c.forEach(function (c) {
-                                    c.forEach(function (c) {
-                                        var p = proj4("EPSG:3111", "WGS84", c);
-                                        points[0][0].push(p);
-                                    })
-                                })
-                            });
-                            geoJSON.features.push({
-                                "type": feature.type,
-                                "properties": feature.properties,
-                                "geometry": { "type": feature.geometry.type, "coordinates": points }
-                            });
-                            break;
-                        case "v2":
-                            console.log(feature.properties.Response00)
-                            var coordinates = []
-                            var c = feature.geometry.coordinates;
-                            c.forEach(function (c) {
-                                var point1 = []
-                                c.forEach(function (c) {
-                                    var p = proj4("EPSG:7899", "WGS84", c);
-                                    point1.push(p);
-                                })
-                                coordinates.push(point1);
-                            });
+                    console.log(feature.properties.Response00)
+                    var coordinates = []
+                    var c = feature.geometry.coordinates;
+                    c.forEach(function (c) {
+                        var point1 = []
+                        c.forEach(function (c) {
+                            var p = proj4("EPSG:3111", "EPSG:4326", c);
+                            point1.push(p);
+                        })
+                        coordinates.push(point1);
+                    });
 
-                            geoJSON.features.push({
-                                "type": feature.type,
-                                "properties": {
-                                    "Agency": feature.properties.Agency,
-                                    "Region": feature.properties.Region,
-                                    "Response_z": feature.properties.Response_z,
-                                    "Response00": feature.properties.Response00,
-                                    "Response01": feature.properties.Response01,
-                                    "Response02": feature.properties.Response02,
-                                    "Division": feature.properties.Division,
-                                    "localcmd": feature.properties.localcmd,
-                                    "localdmo": feature.properties.localdmo,
-                                    "dispch": feature.properties.dispch,
-                                    "dispfullna": feature.properties.dispfullna
-                                },
-                                "geometry": { "type": feature.geometry.type, "coordinates": coordinates }
-                            });
-                            break;
-                        case 'v3':
-                            if (!unitLookup[feature.properties.Response_z]) console.log(feature.properties.Response_z)
-                            feature.properties.Response01 = unitLookup[feature.properties["Response_z"]];
-                            feature.properties.Response01 = regionLookup[feature.properties["Response01"]];
-                            console.log(feature.properties)
-                            geoJSON.features.push(feature);
-                    }
+                    geoJSON.features.push({
+                        "type": feature.type,
+                        "properties": {
+                            "Agency": feature.properties.Agency,
+                            "Region": feature.properties.Region,
+                            "Response_z": feature.properties.Response_z,
+                            "Response00": feature.properties.Response00,
+                            "Response01": feature.properties.Response01,
+                            "Response02": feature.properties.Response02,
+                            "Division": feature.properties.Division,
+                            "localcmd": feature.properties.localcmd,
+                            "localdmo": feature.properties.localdmo,
+                            "dispch": feature.properties.dispch,
+                            "dispfullna": feature.properties.dispfullna
+                        },
+                        "geometry": { "type": feature.geometry.type, "coordinates": coordinates }
+                    });
                 });
                 var newGeoJson = JSON.stringify(geoJSON);
                 // console.log(newGeoJson);
